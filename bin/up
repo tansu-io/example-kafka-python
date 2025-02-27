@@ -7,5 +7,6 @@ docker compose exec minio /usr/bin/mc alias set local http://localhost:9000 mini
 docker compose exec minio /usr/bin/mc mb local/tansu
 mkdir -p venvs
 test -d venvs/dev || uv venv -p 3.12 venvs/dev
+RUN echo "source venvs/dev/bin/activate" >> /root/.bashrc
 source venvs/dev/bin/activate
 uv pip install kafka-python
