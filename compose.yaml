@@ -1,0 +1,61 @@
+---
+services:
+    db:
+        image: ${POSTGRES_IMAGE:-postgres:17}
+        environment:
+            PGUSER: postgres
+            POSTGRES_PASSWORD: postgres
+        ports:
+            - 5432:5432
+        volumes:
+            - db:/var/lib/postgresql/data
+            - ./etc/initdb.d/:/docker-entrypoint-initdb.d/
+        healthcheck:
+            test: /usr/bin/pg_isready
+            interval: 5s
+            timeout: 10s
+            retries: 5
+        pull_policy: missing
+    minio:
+        image: quay.io/minio/minio
+        command: server /data --console-address ":9001"
+        volumes:
+            - minio:/data
+        ports:
+            - 9000:9000
+            - 9001:9001
+        environment:
+            MINIO_PROMETHEUS_AUTH_TYPE: public
+        healthcheck:
+            test: timeout 5s bash -c ':> /dev/tcp/127.0.0.1/9000' || exit 1
+            interval: 5s
+            retries: 1
+            start_period: 5s
+            timeout: 5s
+    tansu:
+        image: ${TANSU_IMAGE}
+        restart: unless-stopped
+        environment:
+            CLUSTER_ID: ${CLUSTER_ID}
+            ADVERTISED_LISTENER_URL: ${ADVERTISED_LISTENER_URL}
+            PROMETHEUS_LISTENER_URL: ${PROMETHEUS_LISTENER_URL}
+            STORAGE_ENGINE: ${STORAGE_ENGINE}
+            RUST_BACKTRACE: ${RUST_BACKTRACE}
+            RUST_LOG: ${RUST_LOG}
+            AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+            AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+            AWS_ENDPOINT: ${AWS_ENDPOINT}
+            AWS_ALLOW_HTTP: ${AWS_ALLOW_HTTP}
+        volumes:
+            - ./etc/schema/:/schema/
+        ports:
+            - 9092:9092
+            - 9100:9100
+        pull_policy: always
+volumes:
+    db:
+        driver: local
+    minio:
+        driver: local
+    grafana:
+        driver: local
