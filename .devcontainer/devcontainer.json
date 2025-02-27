@@ -1,39 +1,39 @@
 {
-    "name": "pgec",
+  "name": "pgec",
 
-    "dockerFile": "Dockerfile",
+  "dockerFile": "Dockerfile",
 
-    "postStartCommand": "docker compose up --detach --remove-orphans",
+  "postStartCommand": "./bin/up",
 
-    "containerEnv": {
-        "PGMP_DATABASE_USER": "postgres",
-        "PGMP_DATABASE_PASSWORD": "postgres"
-    },
+  "containerEnv": {
+    "PGMP_DATABASE_USER": "postgres",
+    "PGMP_DATABASE_PASSWORD": "postgres"
+  },
 
-    "hostRequirements": {
-        "cpus": 2,
-        "memory": "4gb",
-        "storage": "32gb"
-    },
+  "hostRequirements": {
+    "cpus": 2,
+    "memory": "4gb",
+    "storage": "32gb"
+  },
 
-    "customizations": {
-        "codespaces": {
-            "openFiles": ["example.py"]
-        }
-    },
-
-    "forwardPorts": [9092, 9100],
-
-    "portsAttributes": {
-        "9092": { "label": "kafka" },
-        "9100": { "label": "metrics" }
-    },
-
-    "features": {
-        "ghcr.io/devcontainers/features/sshd:1": {},
-
-        "ghcr.io/devcontainers/features/common-utils:2": {},
-
-        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  "customizations": {
+    "codespaces": {
+      "openFiles": ["example.py"]
     }
+  },
+
+  "forwardPorts": [9092, 9100],
+
+  "portsAttributes": {
+    "9092": { "label": "kafka" },
+    "9100": { "label": "metrics" }
+  },
+
+  "features": {
+    "ghcr.io/devcontainers/features/sshd:1": {},
+
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  }
 }

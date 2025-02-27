@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+cp example.env .env
+docker compose up --detach --remove-orphans
