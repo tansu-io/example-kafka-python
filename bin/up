@@ -2,3 +2,10 @@
 
 cp example.env .env
 docker compose up --detach --remove-orphans
+docker compose exec minio /usr/bin/mc ready local
+docker compose exec minio /usr/bin/mc alias set local http://localhost:9000 minioadmin minioadmin
+docker compose exec minio /usr/bin/mc mb local/tansu
+mkdir -p venvs
+test -d venvs/dev || uv venv -p 3.12 venvs/dev
+source venvs/dev/bin/activate
+uv pip install kafka-python
