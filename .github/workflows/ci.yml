@@ -18,6 +18,7 @@ jobs:
     runs-on: ${{matrix.os}}
     steps:
       - uses: actions/checkout@v4
+      - run: cp example.env .env
       - run: docker compose up --detach db
       - uses: astral-sh/setup-uv@v5
         with:
