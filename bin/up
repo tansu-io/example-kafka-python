@@ -2,9 +2,9 @@
 
 cp example.env .env
 docker compose up --no-color --quiet-pull --detach --remove-orphans
-docker compose exec minio /usr/bin/mc --quiet -disable-pager --no-color ready local
-docker compose exec minio /usr/bin/mc --quiet -disable-pager --no-color alias set local http://localhost:9000 minioadmin minioadmin
-docker compose exec minio /usr/bin/mc --quiet -disable-pager --no-color mb local/tansu
+mc --quiet -disable-pager --no-color alias set local http://localhost:9000 minioadmin minioadmin
+mc --quiet -disable-pager --no-color ready local
+mc --quiet -disable-pager --no-color mb local/tansu
 uv  --color never --no-progress venv -p 3.12
 echo "source .venv/bin/activate" >> /root/.bashrc
 source .venv/bin/activate
