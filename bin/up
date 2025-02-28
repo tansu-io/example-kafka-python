@@ -5,8 +5,7 @@ docker compose up --no-color --quiet-pull --detach --remove-orphans
 docker compose exec minio /usr/bin/mc --quiet -disable-pager --no-color ready local
 docker compose exec minio /usr/bin/mc --quiet -disable-pager --no-color alias set local http://localhost:9000 minioadmin minioadmin
 docker compose exec minio /usr/bin/mc --quiet -disable-pager --no-color mb local/tansu
-mkdir -p venvs
-test -d venvs/dev || uv  --color never --no-progress venv -p 3.12 venvs/dev
-echo "source venvs/dev/bin/activate" >> /root/.bashrc
-source venvs/dev/bin/activate
+uv  --color never --no-progress venv -p 3.12
+echo "source .venv/bin/activate" >> /root/.bashrc
+source .venv/bin/activate
 uv --color never --no-progress pip install --link-mode=copy kafka-python
