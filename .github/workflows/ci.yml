@@ -23,4 +23,4 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           python-version: ${{matrix.python}}
-      - run: uv sync --all-extras --dev
+      - run: uv pip install kafka-python
