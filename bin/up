@@ -2,11 +2,11 @@
 
 cp example.env .env
 docker compose up --no-color --quiet-pull --detach --remove-orphans
-docker compose exec minio /usr/bin/mc ready local
-docker compose exec minio /usr/bin/mc alias set local http://localhost:9000 minioadmin minioadmin
-docker compose exec minio /usr/bin/mc mb local/tansu
+docker compose exec minio /usr/bin/mc --quiet -disable-pager --no-color ready local
+docker compose exec minio /usr/bin/mc --quiet -disable-pager --no-color alias set local http://localhost:9000 minioadmin minioadmin
+docker compose exec minio /usr/bin/mc --quiet -disable-pager --no-color mb local/tansu
 mkdir -p venvs
-test -d venvs/dev || uv --no-progress venv -p 3.12 venvs/dev
-RUN echo "source venvs/dev/bin/activate" >> /root/.bashrc
+test -d venvs/dev || uv  --color never --no-progress venv -p 3.12 venvs/dev
+echo "source venvs/dev/bin/activate" >> /root/.bashrc
 source venvs/dev/bin/activate
-uv --no-progress pip install kafka-python
+uv  --color never --no-progress pip install kafka-python
