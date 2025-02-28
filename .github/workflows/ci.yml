@@ -1,0 +1,25 @@
+---
+name: ci
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+        python:
+          - "3.12"
+    runs-on: ${{matrix.os}}
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose up --detach db
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: ${{maxtrix.python}}
+      - run: uv sync --all-extras --dev
