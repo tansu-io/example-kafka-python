@@ -16,6 +16,10 @@ jobs:
           - ubuntu-latest
         storage:
           - s3://tansu/
+          - postgres://postgres:postgres@db
+        tansu:
+          - ghcr.io/tansu-io/tansu:main
+          - ghcr.io/tansu-io/tansu:latest
     runs-on: ${{matrix.os}}
     env:
       ADVERTISED_LISTENER_URL: tcp://[::]:9092
@@ -29,7 +33,7 @@ jobs:
       RUST_BACKTRACE: 1
       RUST_LOG: warn,tansu_server=debug,tansu_storage=debug,tansu_schema_registry=debug
       STORAGE_ENGINE: ${{matrix.storage}}
-      TANSU_IMAGE: ghcr.io/tansu-io/tansu:main
+      TANSU_IMAGE: ${{matrix.tansu}}
     steps:
       - uses: actions/checkout@v4
       - run: docker compose --progress plain up --no-color --quiet-pull --detach
