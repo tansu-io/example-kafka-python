@@ -8,7 +8,7 @@ on:
     branches:
       - main
 jobs:
-  build:
+  example:
     environment: integration
     strategy:
       matrix:
@@ -18,14 +18,18 @@ jobs:
           - s3://tansu/
     runs-on: ${{matrix.os}}
     env:
-      TANSU_IMAGE: ghcr.io/tansu-io/tansu:main
-      CLUSTER_ID: kafka-python-integration
+      ADVERTISED_LISTENER_URL: tcp://[::]:9092
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_ALLOW_HTTP: true
       AWS_DEFAULT_REGION: auto
       AWS_ENDPOINT: http://minio:9000
-      AWS_ALLOW_HTTP: true
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      CLUSTER_ID: kafka-python-integration
+      PROMETHEUS_LISTENER_URL: tcp://[::]:9100
+      RUST_BACKTRACE: 1
+      RUST_LOG: warn,tansu_server=debug,tansu_storage=debug,tansu_schema_registry=debug
       STORAGE_ENGINE: ${{matrix.storage}}
+      TANSU_IMAGE: ghcr.io/tansu-io/tansu:main
     steps:
       - uses: actions/checkout@v4
       - run: docker compose --progress plain up --no-color --quiet-pull --detach
@@ -34,3 +38,4 @@ jobs:
       - run: docker compose exec minio /usr/bin/mc mb local/tansu
       - uses: astral-sh/setup-uv@v5
       - run: uv sync --all-groups
+      - run: uv run example.py
