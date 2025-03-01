@@ -1,5 +1,17 @@
 set dotenv-load
 
+docker-compose-up:
+    docker compose up --detach
+
+docker-compose-down:
+    docker compose down --volumes
+
+docker-compose-ps:
+    docker compose ps
+
+docker-compose-logs:
+    docker compose logs
+
 codespace-create:
     gh codespace create \
         --repo $(gh repo view --json nameWithOwner --jq .nameWithOwner) \

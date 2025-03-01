@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import threading, time
+import sys, threading, time
 
 from kafka import KafkaAdminClient, KafkaConsumer, KafkaProducer
 from kafka.admin import NewTopic
@@ -57,7 +57,7 @@ def main():
                          replication_factor=1)
         admin.create_topics([topic])
     except Exception:
-        pass
+        sys.exit(3)
 
     tasks = [
         Producer(),
