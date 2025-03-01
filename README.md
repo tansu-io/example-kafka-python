@@ -55,24 +55,16 @@ Finally, create a bucket on MinIO for Tansu:
 docker compose exec minio /usr/bin/mc mb local/tansu
 ```
 
-Using [uv](https://docs.astral.sh/uv/), setup a virtual Python development environment:
+Using [uv](https://docs.astral.sh/uv/), sync the project:
 
 ```shell
-mkdir -p venvs
-test -d venvs/dev || uv venv -p 3.12 venvs/dev
-source venvs/dev/bin/activate
-```
-
-Install [kafka-python](https://github.com/dpkp/kafka-python):
-
-```shell
-uv pip install kafka-python
+uv sync --all-groups
 ```
 
 Run the example:
 
 ```shell
-python example.py
+uv run example.py
 ```
 
 You should see the following output:
