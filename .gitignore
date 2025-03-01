@@ -3,3 +3,4 @@ venvs
 .ropeproject
 *.log
 *.egg-info
+*~
