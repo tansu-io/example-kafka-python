@@ -9,21 +9,28 @@ on:
       - main
 jobs:
   build:
+    environment: integration
     strategy:
       matrix:
         os:
           - ubuntu-latest
-        python:
-          - "3.12"
+        storage:
+          - s3://tansu/
     runs-on: ${{matrix.os}}
     steps:
       - uses: actions/checkout@v4
-      - run: cp example.env .env
       - run: docker compose --progress plain up --no-color --quiet-pull --detach
+        env:
+          TANSU_IMAGE: ghcr.io/tansu-io/tansu:main
+          CLUSTER_ID: kafka-python-integration
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          AWS_ENDPOINT: http://minio:9000
+          AWS_ALLOW_HTTP: true
+          STORAGE_ENGINE: ${{matrix.storage}}
       - run: docker compose exec minio /usr/bin/mc ready local
-      - run: docker compose exec minio /usr/bin/mc alias set local http://localhost:9000 minioadmin minioadmin
+      - run: docker compose exec minio /usr/bin/mc alias set local http://localhost:9000 ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - run: docker compose exec minio /usr/bin/mc mb local/tansu
       - uses: astral-sh/setup-uv@v5
-        with:
-          python-version: ${{matrix.python}}
-      - run: uv pip install kafka-python
+      - run: uv sync --all-groups
