@@ -1,12 +1,21 @@
-# Kafka Python with Tansu
+# Kafka Python client with Tansu
 
-Tansu is a Kafka compatible broker that stores data in S3 or PostgreSQL.
-This example uses [kafka-python](https://github.com/dpkp/kafka-python),
-with [MinIO S3](https://min.io) or [PostgreSQL](https://www.postgresql.org)
-to send and receive messages with Tansu.
+[Tansu](https://tansu.io) is an Apache Kafka compatible broker that stores data
+in S3 or PostgreSQL. This example uses the
+[kafka-python](https://github.com/dpkp/kafka-python) client,
+to send and receive messages with [Tansu](https://tansu.io).
 
-[MinIO](https://min.io), [PostgreSQL](https://www.postgresql.org) and Tansu
-run in [Docker](https://docs.docker.com/desktop/) for easy installation and setup.
+In this example, [MinIO](https://min.io), [PostgreSQL](https://www.postgresql.org)
+and [Tansu](https://tansu.io) run in [Docker](https://docs.docker.com/desktop/)
+[Compose](https://docs.docker.com/compose/)
+for easy installation and setup.
+
+Start off by cloning this repository:
+
+```shell
+git clone https://github.com/tansu-io/example-kafka-python.git
+cd example-kafka-python
+```
 
 Copy `example.env` into `.env` so that you have a local working copy:
 
@@ -25,7 +34,7 @@ To use [PostgreSQL](https://www.postgresql.org), uncomment this line and
 comment out other `STORAGE_ENGINE` definitions in your `.env`:
 
 ```
-STORAGE_ENGINE="postgres://postgres:postgres@localhost"
+STORAGE_ENGINE="postgres://postgres:postgres@db"
 ```
 
 Now, start up Minio S3, PostgreSQL and Tansu:
@@ -34,7 +43,7 @@ Now, start up Minio S3, PostgreSQL and Tansu:
 docker compose up -d
 ```
 
-Tansu's PostgreSQL schema is set up in [compose.yaml](./compose.yaml),
+[Tansu's](https://tansu.io) PostgreSQL [schema](etc/initdb.d/010-schema.sql) is set up in [compose.yaml](compose.yaml),
 requiring no extra configuration. If you're using MinIO, there are 3 extra steps.
 
 Wait for MinIO to become ready:
