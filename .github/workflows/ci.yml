@@ -40,6 +40,6 @@ jobs:
       - run: docker compose exec minio /usr/bin/mc ready local
       - run: docker compose exec minio /usr/bin/mc alias set local http://localhost:9000 ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - run: docker compose exec minio /usr/bin/mc mb local/tansu
-      - uses: astral-sh/setup-uv@v5
+      - uses: astral-sh/setup-uv@v7
       - run: uv sync --all-groups
       - run: uv run example.py
