@@ -35,7 +35,7 @@ jobs:
       STORAGE_ENGINE: ${{matrix.storage}}
       TANSU_IMAGE: ${{matrix.tansu}}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - run: docker compose --progress plain up --no-color --quiet-pull --detach
       - run: docker compose exec minio /usr/bin/mc ready local
       - run: docker compose exec minio /usr/bin/mc alias set local http://localhost:9000 ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }}
